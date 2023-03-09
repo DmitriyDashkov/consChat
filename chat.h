@@ -5,19 +5,20 @@
 
 #define MAX_USERS 100
 
-using namespace std;
 class User;
 class Chat
 {
 private:
-    string m_name;
+    std::string _name;
 
 public:
-    Chat(string n);
-    int numberOfUsers {0};          //количество юзеров в чате
-    User* users[MAX_USERS];         //список юзеров
-    void showUsers();
-    void addUser(User* newUser);    //добавить юзера в чат
-    User* currentUser;              //текущий пользователь чата
-    void setCurrentUser (User* u);  //установить текущего пользователя чата
+    Chat(std::string n);
+    int numberOfUsers {0};              //количество юзеров в чате
+    User* users[MAX_USERS];             //список юзеров
+    void working();                     //работа чата
+    void addUser(User* newUser);        //добавить юзера в чат
+    User* currentUser = nullptr;        //текущий пользователь чата
+    void setCurrentUser();             //установить текущего пользователя чата
+    void createUser();
+    void showUsers();                   //показать список юзеров
 };

@@ -11,12 +11,9 @@ int main()
     chat->addUser(user2);
     chat->addUser(user3);
 
-    cout << "Set current User: " << endl;
-    chat->showUsers();
-    int currUser;
-    cin >> currUser;
-    chat->setCurrentUser(chat->users[currUser]);
-    cout << "Current User is " << chat->currentUser->getUserLogin() << endl;
+    chat->working();
+
+
 
     return 0;
 }
