@@ -1,7 +1,4 @@
 #pragma once
-
-
-#pragma once
 #include <string>
 using namespace std;
 
@@ -34,7 +31,7 @@ public:
         password_ = password;
     }
 
-    const string& setUserName() const { return name_; }
+    const string& getUserName() const { return name_; }
 
     void setUserName(const string& name)
 
