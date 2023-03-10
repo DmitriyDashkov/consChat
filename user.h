@@ -1,16 +1,13 @@
 #pragma once
-
-
-#pragma once
 #include <string>
 using namespace std;
 
 class User
 
 {
-    const string login_; // РЅРµР»СЊР·СЏ РїРѕРјРµРЅС‚СЊ Р»РѕРіРёРЅ (const)
-    string password_; // РјРѕР¶РЅРѕ РїРѕРјРµРЅСЏС‚СЊ РїР°СЂРѕР»СЊ
-    string name_; // РјРѕР¶РЅРѕ РїРѕРјРµРЅСЏС‚СЊ РёРјСЏ
+    const string login_; // нельзя поменть логин (const)
+    string password_; // можно поменять пароль
+    string name_; // можно поменять имя
 
 public:
     User(const string& login, const string& password, const string& name) : login_(login), password_(password), name_(name)
@@ -28,6 +25,12 @@ public:
         return password_;
     }
 
+    const string& getUserName() const
+
+    {
+        return name_;
+    }
+
     void setUserPassword(const string& password)
 
     {
@@ -43,3 +46,4 @@ public:
     }
 
 };
+
