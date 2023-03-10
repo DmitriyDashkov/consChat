@@ -1,6 +1,10 @@
 #include "chat.h"
 #include "user.h"
 
+#include <limits>
+
+
+
 Chat::Chat(string n) : _name(n)
 {
 
@@ -86,6 +90,7 @@ void Chat::chatEntry()
 void Chat::workingUser()
 {
     bool b{true};
+
     while(b) {
         std::cout << "********** " << "User " << currentUser()->getUserLogin() << " **********" << endl;
         std::cout << "0 - back" << endl;
@@ -128,11 +133,21 @@ void Chat::showGeneralChat()
 }
 void Chat::showInbox()
 {
-
+    std::cout << "Inbox messages:" << endl;
+    for (unsigned int i=0; i<messages.size(); i++) {
+        if(messages.at(i)->getTo() == currentUser()->getUserLogin()) {
+            std::cout << "From " << messages.at(i)->getFrom() << ":       " << messages.at(i)->getMessage() << endl;
+        }
+    }
 }
 void Chat::showOutgoing()
 {
-
+    std::cout << "Outgoing messages:" << endl;
+    for (unsigned int i=0; i<messages.size(); i++) {
+        if(messages.at(i)->getFrom() == currentUser()->getUserLogin()) {
+            std::cout << "To " << messages.at(i)->getTo() << ":       " << messages.at(i)->getMessage() << endl;
+        }
+    }
 }
 void Chat::messageInGeneralChat()
 {
@@ -140,5 +155,24 @@ void Chat::messageInGeneralChat()
 }
 void Chat::privateMessage()
 {
-
+    std::cout << "To whom: " << endl;
+    std::vector<User*> addressees;
+    for(int i=0; i<numberOfUsers; i++) {
+        if(users[i]->getUserLogin() != currentUser()->getUserLogin())
+            addressees.push_back(users[i]);
+    }
+    for(unsigned int i=1; i<=addressees.size(); i++) {
+        std::cout << i << " - " << addressees[i-1]->getUserLogin() << endl;
+    }
+    unsigned int choice;
+    std::cin >> choice;
+    std::cout << "Enter your message to " << addressees[choice-1]->getUserLogin() << ":" << endl;
+    std::string mes;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, mes);
+    Message *message = new Message(currentUser()->getUserLogin(),
+                                   addressees[choice-1]->getUserLogin(),
+                                    mes);
+    messages.push_back(message);
+    std::cout << "Message sent" << endl;
 }
