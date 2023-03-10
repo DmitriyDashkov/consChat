@@ -1,21 +1,14 @@
 #include "chat.h"
-#include "user.h"
-
 #include <limits>
 
-
-
-Chat::Chat(string n) : _name(n)
-{
-
-}
+Chat::Chat(std::string n) : _name(n) {}
 
 void Chat::working()
 {
     int choice;
     bool b{true};
     while(b) {
-        std::cout << "********* START CHAT **********" << endl;
+        std::cout << "\n********* START CHAT **********" << endl;
         std::cout << "0 - Exit " << endl;
         std::cout << "1 - Create new User " << endl;
         std::cout << "2 - Enter the chat as a user " << endl;
@@ -49,21 +42,40 @@ void Chat::createUser()
     std::cout << "Enter user name:" << endl;
     std::string name;
     std::cin >> name;
-    if(login.length()!=0 && password.length()!=0 && name.length()!=0) {
+    /*if(login.length()!=0 && password.length()!=0 && name.length()!=0) {
         User* newUser = new User(login, password, name);
         addUser(newUser);
+    }*/
+    if (login == "all" || getHavingLogin(login))
+    {
+        std::cout << "Error. This login already exists." << std::endl;
+    }
+    else if (name == "all" || getHavingName(name))
+    {
+        std::cout << "Error. This name already exists." << std::endl;
+    }
+    else
+    {
+        User user = User(login, password, name);
+        _users.push_back(user);
+        //_curentUserName = std::make_shared<User>(user);
     }
 }
 
-void Chat::addUser(User* newUser)
+//void Chat::addUser(User* newUser)
+//{
+//    users[numberOfUsers] = newUser;
+//    numberOfUsers++;
+//}
+
+std::shared_ptr<User> Chat::getCurentUserName() const
 {
-    users[numberOfUsers] = newUser;
-    numberOfUsers++;
+    return _curentUserName;
 }
 
 void Chat::chatEntry()
 {
-    bool b{true};
+    /*bool b{true};
     while(b) {
         std::cout << "Chat entry" << endl;
         std::cout << "User choice:" << endl;
@@ -84,6 +96,22 @@ void Chat::chatEntry()
         else {
             std::cout << "Incorrect password" << endl;
         }
+    } */
+    std::cout << "Enter login: ";
+    std::string login;
+    std::cin >> login;
+    std::cout << "Enter password: ";
+    std::string password;
+    std::cin >> password;
+    _curentUserName = getHavingLogin(login);
+    if (_curentUserName == nullptr || (password != _curentUserName->getUserPassword()))
+    {
+        _curentUserName = nullptr;
+        std::cout << "Error." << std::endl;
+    }
+    else
+    {
+        workingUser();
     }
 }
 
@@ -92,13 +120,13 @@ void Chat::workingUser()
     bool b{true};
 
     while(b) {
-        std::cout << "********** " << "User " << currentUser()->getUserLogin() << " **********" << endl;
+        std::cout << "\n********** " << "User " << _curentUserName->getUserName() << " **********" << endl;
         std::cout << "0 - back" << endl;
-        std::cout << "1 - Show general chat" << endl;
-        std::cout << "2 - Show inbox" << endl;
-        std::cout << "3 - Show outgoing" << endl;
-        std::cout << "4 - Message in general chat" << endl;
-        std::cout << "5 - Private message" << endl;
+        std::cout << "1 - read messages" << endl;
+        std::cout << "2 - to write a message" << endl;
+        //std::cout << "3 - Show outgoing" << endl;
+        //std::cout << "4 - Message in general chat" << endl;
+        //std::cout << "5 - Private message" << endl;
         int choice;
         std::cin >> choice;
         switch (choice) {
@@ -106,12 +134,12 @@ void Chat::workingUser()
             b = false;
             break;
         case 1:
-            showGeneralChat();
+            readMessages();
             break;
         case 2:
-            showInbox();
+            writeMessage();
             break;
-        case 3:
+        /*case 3:
             showOutgoing();
             break;
         case 4:
@@ -119,7 +147,7 @@ void Chat::workingUser()
             break;
         case 5:
             privateMessage();
-            break;
+            break;*/
         default:
             std::cout << "Retry please... " << endl;
             break;
@@ -127,52 +155,94 @@ void Chat::workingUser()
     }
 }
 
-void Chat::showGeneralChat()
+std::shared_ptr<User> Chat::getHavingLogin(const std::string& login) const
+{
+    for (auto& user : _users)
+    {
+        if (login == user.getUserLogin())
+            return std::make_shared<User>(user);
+    }
+    return nullptr;
+}
+
+std::shared_ptr<User> Chat::getHavingName(const std::string& name) const
+{
+    for (auto& user : _users)
+    {
+        if (name == user.getUserName())
+            return std::make_shared<User>(user);
+    }
+    return nullptr;
+}
+
+void Chat::readMessages()
 {
 
 }
-void Chat::showInbox()
+
+void Chat::writeMessage()
 {
-    std::cout << "Inbox messages:" << endl;
+    std::string to;
+    std::cout << "To whom: ";
+    std::cin >> to;
+    std::string text;
+    std::cout << "Message text: ";
+    std::cin.ignore();
+    getline(std::cin, text);
+
+    if (to == "all")
+    {
+        _messages.push_back(Message(_curentUserName->getUserName(), "all", text));
+    }
+    else if (getHavingName(to))
+    {
+        _messages.push_back(Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text));
+    }
+    else
+    {
+        std::cout << "Error. No username." << std::endl;
+    }   
+
+    /*std::cout << "Inbox messages:" << endl;
     for (unsigned int i=0; i<messages.size(); i++) {
         if(messages.at(i)->getTo() == currentUser()->getUserLogin()) {
             std::cout << "From " << messages.at(i)->getFrom() << ":       " << messages.at(i)->getMessage() << endl;
         }
-    }
+    }*/
 }
-void Chat::showOutgoing()
-{
-    std::cout << "Outgoing messages:" << endl;
-    for (unsigned int i=0; i<messages.size(); i++) {
-        if(messages.at(i)->getFrom() == currentUser()->getUserLogin()) {
-            std::cout << "To " << messages.at(i)->getTo() << ":       " << messages.at(i)->getMessage() << endl;
-        }
-    }
-}
-void Chat::messageInGeneralChat()
-{
-
-}
-void Chat::privateMessage()
-{
-    std::cout << "To whom: " << endl;
-    std::vector<User*> addressees;
-    for(int i=0; i<numberOfUsers; i++) {
-        if(users[i]->getUserLogin() != currentUser()->getUserLogin())
-            addressees.push_back(users[i]);
-    }
-    for(unsigned int i=1; i<=addressees.size(); i++) {
-        std::cout << i << " - " << addressees[i-1]->getUserLogin() << endl;
-    }
-    unsigned int choice;
-    std::cin >> choice;
-    std::cout << "Enter your message to " << addressees[choice-1]->getUserLogin() << ":" << endl;
-    std::string mes;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::getline(std::cin, mes);
-    Message *message = new Message(currentUser()->getUserLogin(),
-                                   addressees[choice-1]->getUserLogin(),
-                                    mes);
-    messages.push_back(message);
-    std::cout << "Message sent" << endl;
-}
+//void Chat::showOutgoing()
+//{
+//    std::cout << "Outgoing messages:" << endl;
+//    for (unsigned int i=0; i<messages.size(); i++) {
+//        if(messages.at(i)->getFrom() == currentUser()->getUserLogin()) {
+//            std::cout << "To " << messages.at(i)->getTo() << ":       " << messages.at(i)->getMessage() << endl;
+//        }
+//    }
+//}
+//void Chat::messageInGeneralChat()
+//{
+//
+//}
+//void Chat::privateMessage()
+//{
+//    std::cout << "To whom: " << endl;
+//    std::vector<User*> addressees;
+//    for(int i=0; i<numberOfUsers; i++) {
+//        if(users[i]->getUserLogin() != currentUser()->getUserLogin())
+//            addressees.push_back(users[i]);
+//    }
+//    for(unsigned int i=1; i<=addressees.size(); i++) {
+//        std::cout << i << " - " << addressees[i-1]->getUserLogin() << endl;
+//    }
+//    unsigned int choice;
+//    std::cin >> choice;
+//    std::cout << "Enter your message to " << addressees[choice-1]->getUserLogin() << ":" << endl;
+//    std::string mes;
+//    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+//    std::getline(std::cin, mes);
+//    Message *message = new Message(currentUser()->getUserLogin(),
+//                                   addressees[choice-1]->getUserLogin(),
+//                                    mes);
+//    messages.push_back(message);
+//    std::cout << "Message sent" << endl;
+//}
