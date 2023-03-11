@@ -5,26 +5,26 @@ Chat::Chat(std::string n) : _name(n) {}
 
 void Chat::working()
 {
-    int choice;
+    char choice;
     bool b{true};
     while(b) {
-        std::cout << "\n********* START CHAT **********" << endl;
-        std::cout << "0 - Exit " << endl;
-        std::cout << "1 - Create new User " << endl;
-        std::cout << "2 - Enter the chat as a user " << endl;
+        std::cout << "\n********* START CHAT **********" << std::endl;
+        std::cout << "0 - Exit " << std::endl;
+        std::cout << "1 - Create new User " << std::endl;
+        std::cout << "2 - Enter the chat as a user " << std::endl;
         std::cin >> choice;
         switch (choice) {
-        case 0:
+        case '0':
             b = false;
             break;
-        case 1:
+        case '1':
             createUser();
             break;
-        case 2:
+        case '2':
             chatEntry();
             break;
         default:
-            std::cout << "Retry please... " << endl;
+            std::cout << "Retry please... " << std::endl;
             break;
         }
     }
@@ -32,14 +32,14 @@ void Chat::working()
 
 void Chat::createUser()
 {
-    std::cout << "Creating a new user" << endl;
-    std::cout << "Enter user login:" << endl;
+    std::cout << "Creating a new user" << std::endl;
+    std::cout << "Enter user login:" << std::endl;
     std::string login;
     std::cin >> login;
-    std::cout << "Enter user password:" << endl;
+    std::cout << "Enter user password:" << std::endl;
     std::string password;
     std::cin >> password;
-    std::cout << "Enter user name:" << endl;
+    std::cout << "Enter user name:" << std::endl;
     std::string name;
     std::cin >> name;
     /*if(login.length()!=0 && password.length()!=0 && name.length()!=0) {
@@ -121,22 +121,22 @@ void Chat::workingUser()
 
     while(b) {
         std::cout << "\n********** " << "User " << _curentUserName->getUserName() << " **********" << endl;
-        std::cout << "0 - back" << endl;
-        std::cout << "1 - read messages" << endl;
-        std::cout << "2 - to write a message" << endl;
+        std::cout << "0 - back" << std::endl;
+        std::cout << "1 - read messages" << std::endl;
+        std::cout << "2 - to write a message" << std::endl;
         //std::cout << "3 - Show outgoing" << endl;
         //std::cout << "4 - Message in general chat" << endl;
         //std::cout << "5 - Private message" << endl;
-        int choice;
+        char choice;
         std::cin >> choice;
         switch (choice) {
-        case 0:
+        case '0':
             b = false;
             break;
-        case 1:
+        case '1':
             readMessages();
             break;
-        case 2:
+        case '2':
             writeMessage();
             break;
         /*case 3:
@@ -149,7 +149,7 @@ void Chat::workingUser()
             privateMessage();
             break;*/
         default:
-            std::cout << "Retry please... " << endl;
+            std::cout << "Retry please... " << std::endl;
             break;
         }
     }
@@ -177,13 +177,24 @@ std::shared_ptr<User> Chat::getHavingName(const std::string& name) const
 
 void Chat::readMessages()
 {
-
-}
+    std::cout << "\n********** Messages to " << _curentUserName->getUserName() << " and to all **********" << std::endl;
+    std::string from;
+    std::string to;
+    for (auto& message : _messages)
+    {
+        if (_curentUserName->getUserName() == message.getTo() || message.getTo() == "all")
+        {
+            std::cout << "\nMessage from " << message.getFrom() << " to " << message.getTo() << std::endl;
+            std::cout << "text: " << message.getMessage() << std::endl;
+        }
+    }
+    std::cout << "-------------------------" << std::endl;
+ }
 
 void Chat::writeMessage()
 {
     std::string to;
-    std::cout << "To whom: ";
+    std::cout << "To: ";
     std::cin >> to;
     std::string text;
     std::cout << "Message text: ";
