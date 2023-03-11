@@ -188,7 +188,7 @@ void Chat::readMessages()
             std::cout << "text: " << message.getMessage() << std::endl;
         }
     }
-    std::cout << "-------------------------" << std::endl;
+    std::cout << "--------------end---------------" << std::endl;
  }
 
 void Chat::writeMessage()
