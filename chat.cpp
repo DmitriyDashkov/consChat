@@ -182,31 +182,13 @@ void Chat::readMessages()
     std::string to;
     for (auto& message : _messages)
     {
-        // ѕоказываем сообщени€: от текущего пользовател€, дл€ него и дл€ всем
-
         if (_curentUserName->getUserName() == message.getTo() || message.getTo() == "all")
         {
-            //подмен€ем дл€ себ€ има на ме// _curentUserName->getUserLogin() == message.getFrom() || 
-
-            /*from = (_curentUserName->getUserLogin() == message.getFrom()) ? "me" :
-                getUserByLogin(message.getFrom())->getUserName();
-
-            if (message.getTo() == "all")
-
-            {
-
-                to = "(all)";
-            }
-            else
-            {
-                to = (_curentUserName->getUserLogin() == mess.getTo()) ? "me" : getUserByLogin(mess.getTo())->getUserName();
-            }*/
             std::cout << "\nMessage from " << message.getFrom() << " to " << message.getTo() << std::endl;
-
             std::cout << "text: " << message.getMessage() << std::endl;
         }
     }
-    std::cout << "-------------------------" << std::endl;
+    std::cout << "-----------end--------------" << std::endl;
  }
 
 void Chat::writeMessage()
