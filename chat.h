@@ -3,10 +3,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <exception>
 #include "Message.h"
 
 #define MAX_USERS 100
 #define MAX_MESSAGES 1000
+
+struct UserLoginExp : public std::exception
+{
+    const char* what() const noexcept { return "attantion: user login is busy"; }
+};
 
 class User;
 class Message;
