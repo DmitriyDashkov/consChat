@@ -5,11 +5,11 @@ class User
 
 {
     const std::string _login; // нельзя поменть логин (const)
-    std::string password_; // можно поменять пароль
-    std::string name_; // можно поменять имя
+    std::string _password; // можно поменять пароль
+    std::string _name; // можно поменять имя
 
 public:
-    User(const std::string& login, const std::string& password, const std::string& name) : _login(login), password_(password), name_(name)
+    User(const std::string& login, const std::string& password, const std::string& name) : _login(login), _password(password), _name(name)
     {}
 
     const std::string& getUserLogin() const
@@ -21,21 +21,21 @@ public:
     const std::string& getUserPassword() const
 
     {
-        return password_;
+        return _password;
     }
 
     void setUserPassword(const std::string& password)
 
     {
-        password_ = password;
+        _password = password;
     }
 
-    const std::string& getUserName() const { return name_; }
+    const std::string& getUserName() const { return _name; }
 
     void setUserName(const std::string& name)
 
     {
-        name_ = name;
+        _name = name;
     }
 
 };
