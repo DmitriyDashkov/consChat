@@ -66,7 +66,7 @@ void Chat::createUser()
     else
     {
         User *user = new User (login, password, name);
-//        std::unique_ptr<User> user (new User(login, password, name));
+ //       std::unique_ptr<User> user (new User(login, password, name));
         _users.push_back(user);
     }
 }
@@ -101,7 +101,7 @@ void Chat::workingUser()
     bool b{true};
 
     while(b) {
-        std::cout << "\n********** " << "User " << _curentUserName->getUserName() << " **********" << endl;
+        std::cout << "\n********** " << "User " << _curentUserName->getUserName() << " **********" << std::endl;
         std::cout << "0 - back" << std::endl;
         std::cout << "1 - read messages" << std::endl;
         std::cout << "2 - to write a message" << std::endl;
@@ -129,7 +129,7 @@ std::shared_ptr<User> Chat::getHavingLogin(const std::string& login) const
 {
     for (auto& user : _users)
     {
-        if (login == user->getUserLogin())
+        if (login == user.getUserLogin())
             return std::make_shared<User>(user);
     }
     return nullptr;
@@ -139,7 +139,7 @@ std::shared_ptr<User> Chat::getHavingName(const std::string& name) const
 {
     for (auto& user : _users)
     {
-        if (name == user->getUserName())
+        if (name == user.getUserName())
             return std::make_shared<User>(user);
     }
     return nullptr;
@@ -150,39 +150,27 @@ void Chat::readMessages()
     std::string from;
     std::string to;
 
-    for(auto& message : _messages)
+    SetColor(10, 0);    //общие
+    std::cout << "\n********** Messages to all **********" << std::endl;
+    for (auto& message : _messages)
     {
-        if(_curentUserName->getUserName() == message->getFrom())
+        if (message.getTo() == "all")
         {
-            SetColor(2,0);    //личные исходящие
-            std::cout << "\nMessage to " << message->getTo() << std::endl;
-            std::cout << "text: " << message->getMessage() << std::endl;
+            std::cout << "\nFrom " << message.getFrom() << " : " << message.getMessage() << std::endl;
+        }
+    }
+
+    SetColor(14, 0);    //личные входящие
+    std::cout << "\n********** Messages to " << _curentUserName->getUserName() << " **********" << std::endl;
+    for (auto& message : _messages)
+    {
+        if (_curentUserName->getUserName() == message.getTo())
+        {
+            std::cout << "\nFrom " << message.getFrom() << " : " << message.getMessage() << std::endl;
         }
 
     }
-    for(auto& message : _messages)
-    {
-        if(_curentUserName->getUserName() == message->getTo())
-        {
-            SetColor(3,0);    //личные входящие
-            std::cout << "\nMessage from " << message->getFrom() << std::endl;
-            std::cout << "text: " << message->getMessage() << std::endl;
-        }
-
-    }
-
-    SetColor(4,0);    //общие
-    std::cout << "\nGeneral chat messages: " << std::endl;
-    for(auto& message : _messages)
-    {
-        if(message->getTo() == "all")
-        {
-            std::cout << message->getFrom() << " : "
-                      << message->getMessage() << std::endl;
-        }
-    }
-    SetColor(7,0);
-    std::cout << "-----------end--------------" << std::endl;
+    std::cout << "--------------end----------------" << std::endl;
  }
 
 void Chat::writeMessage()
