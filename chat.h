@@ -10,13 +10,13 @@ class Chat
 {
 private:
     std::string _name;                  //имя чата
-    std::vector<User*> _users;
-    std::vector<Message*> _messages;      //все сообщения
+    std::vector<User> _users;
+    std::vector<Message> _messages;      //все сообщения
     std::shared_ptr<User> _curentUserName = nullptr;
 
 public:
     Chat(std::string n);
-//    ~Chat();
+    ~Chat();
     
     void working();                                         //работа чата
     void createUser();                                      //создать юзера

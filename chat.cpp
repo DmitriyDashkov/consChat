@@ -10,10 +10,10 @@ void SetColor(int text, int bg){
 
 Chat::Chat(std::string n) : _name(n) {}
 
-//Chat::~Chat()
-//{
+Chat::~Chat()
+{
 
-//}
+}
 
 void Chat::working()
 {
