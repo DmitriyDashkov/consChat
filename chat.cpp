@@ -124,7 +124,7 @@ void Chat::workingUser()
         }
     }
 }
-q
+
 std::shared_ptr<User> Chat::getHavingLogin(const std::string& login) const
 {
     for (auto& user : _users)
