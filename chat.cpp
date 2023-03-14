@@ -25,6 +25,7 @@ void Chat::working()
         std::cout << "0 - Exit " << std::endl;
         std::cout << "1 - Create new User " << std::endl;
         std::cout << "2 - Enter the chat as a user " << std::endl;
+        std::cout << "3 - Show info about user by index " << std::endl;
         std::cin >> choice;
         switch (choice) {
         case '0':
@@ -35,6 +36,9 @@ void Chat::working()
             break;
         case '2':
             chatEntry();
+            break;
+        case '3':
+            userInfo();
             break;
         default:
             std::cout << "\x1b[31mRetry please...\x1b[0m" << std::endl;
@@ -68,8 +72,18 @@ void Chat::createUser()
     else
     {
         User user = User (login, password, name);
- //       std::unique_ptr<User> user (new User(login, password, name));
         _users.push_back(user);
+
+
+//         std::shared_ptr<User> user (new User(login, password, name));
+//         _users.push_back(user);
+//         try {
+//             if((userCount()%3) == 0)
+//                 std::cout << "поздравляем, "  << _users[userCount()].getUserName()
+//                           << " , каждому пятому положен приз";
+//         } catch (...) {
+
+//         }
     }
 }
 
@@ -189,12 +203,16 @@ void Chat::writeMessage()
 
     if (to == "all")
     {
-        /* Message *message = new Message(_curentUserName->getUserName(), "all", text);
-         _messages.push_back(message);*/
+//        std::shared_ptr<Message> message (new Message(_curentUserName->getUserName(), "all", text));
+//        _messages.push_back(message);
+//         Message *message = new Message(_curentUserName->getUserName(), "all", text);
+//         _messages.push_back(message);
         _messages.push_back(Message(_curentUserName->getUserName(), "all", text));
     }
     else if (getHavingName(to))
     {
+//        std::shared_ptr<Message> message (new Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text));
+//        _messages.push_back(message);
         /*Message *message = new Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text);
         _messages.push_back(message);*/
         _messages.push_back(Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text));
@@ -204,3 +222,45 @@ void Chat::writeMessage()
         std::cout << "\x1b[31mError. No username.\x1b[0m" << std::endl;
     }
 }
+
+void Chat::userInfo()
+{
+    try {
+        std::cout << "Enter user index" << std::endl;
+        unsigned int choice;
+        while (!(cin >> choice)) {
+            cout << "Input Error\n";
+            cin.clear();
+            fflush(stdin);
+        }
+        if(choice < 0 || choice >= users().size()) throw ChatError(0);
+        else
+            showUserInfo(choice);
+    } catch (ChatError& ex) {
+        cout << ex.what() << endl;
+    }
+}
+
+void Chat::showUserInfo(unsigned int choice)
+{
+    std::cout << "Info about user " << users().at(choice).getUserName() << std::endl;
+    std::cout << "User login: " << users().at(choice).getUserLogin() << std::endl;
+    std::cout << "User password: " << users().at(choice).getUserPassword() << std::endl;
+    std::cout << "User name: " << users().at(choice).getUserName() << std::endl;
+    int a{0}, b{0};
+    for(auto mes : _messages) {
+        if (mes.getFrom() == users().at(choice).getUserName()) a++;
+        if (mes.getTo() == users().at(choice).getUserName()) b++;
+    }
+    std::cout << "Number of outgoing messages: " << a << std::endl;
+    std::cout << "Number of incoming messages: " << b << std::endl;
+}
+
+ChatError::ChatError(int num) : m_numError(num)
+{}
+
+const char* ChatError::what() const noexcept
+{
+    return m_message[m_numError].c_str();
+}
+
