@@ -2,7 +2,7 @@
 
 Message::Message() = default;
 Message::Message(const std::string& from, const std::string& to, const std::string& message) : _from(from), _to(to), _message(message) {}
-Message::~Message() {}
+Message::~Message() = default;
 
 const std::string& Message::getFrom() const { return _from; }
 void Message::setFrom(std::string& from) { _from = from; }
