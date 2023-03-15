@@ -11,9 +11,9 @@ using namespace std;
 class Chat
 {
 private:
-    std::string _name;                  //имя чата
-    std::vector<User> _users;
-    std::vector<Message> _messages;      //все сообщения
+    std::string _name;                          //имя чата
+    std::vector<shared_ptr<User>> _users;       //пользователи чата
+    std::vector<shared_ptr<Message>> _messages; //все сообщения
     std::shared_ptr<User> _curentUserName = nullptr;
 
 public:
@@ -31,7 +31,7 @@ public:
     void writeMessage();                                    //написать сообщение
     void userInfo();
     void showUserInfo(unsigned int);
-    std::vector<User> users()           {return _users;}
+    std::vector<shared_ptr<User>> users()   {return _users;}
 };
 
 class ChatError : public exception

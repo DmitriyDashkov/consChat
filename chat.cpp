@@ -74,19 +74,8 @@ void Chat::createUser()
     }
     else
     {
-        User user = User (login, password, name);
-        _users.push_back(user);
-
-
-//         std::shared_ptr<User> user (new User(login, password, name));
-//         _users.push_back(user);
-//         try {
-//             if((userCount()%3) == 0)
-//                 std::cout << "поздравляем, "  << _users[userCount()].getUserName()
-//                           << " , каждому пятому положен приз";
-//         } catch (...) {
-
-//         }
+         std::shared_ptr<User> user (new User(login, password, name));
+         _users.push_back(user);
     }
 }
 
@@ -152,8 +141,8 @@ std::shared_ptr<User> Chat::getHavingLogin(const std::string& login) const
 {
     for (auto& user : _users)
     {
-        if (login == user.getUserLogin())
-            return std::make_shared<User>(user);
+        if (login == user->getUserLogin())
+            return std::shared_ptr<User>(user);
     }
     return nullptr;
 }
@@ -162,8 +151,8 @@ std::shared_ptr<User> Chat::getHavingName(const std::string& name) const
 {
     for (auto& user : _users)
     {
-        if (name == user.getUserName())
-            return std::make_shared<User>(user);
+        if (name == user->getUserName())
+            return std::shared_ptr<User>(user);
     }
     return nullptr;
 }
@@ -177,9 +166,9 @@ void Chat::readMessages()
     std::cout << "\n********** Messages to all **********" << std::endl;
     for (auto& message : _messages)
     {
-        if (message.getTo() == "all")
+        if (message->getTo() == "all")
         {
-            std::cout << "\nFrom " << message.getFrom() << " : " << message.getMessage() << std::endl;
+            std::cout << "\nFrom " << message->getFrom() << " : " << message->getMessage() << std::endl;
         }
     }
 
@@ -187,9 +176,9 @@ void Chat::readMessages()
     std::cout << "\n********** Messages to " << _curentUserName->getUserName() << " **********" << std::endl;
     for (auto& message : _messages)
     {
-        if (_curentUserName->getUserName() == message.getTo())
+        if (_curentUserName->getUserName() == message->getTo())
         {
-            std::cout << "\nFrom " << message.getFrom() << " : " << message.getMessage() << std::endl;
+            std::cout << "\nFrom " << message->getFrom() << " : " << message->getMessage() << std::endl;
         }
     }
     std::cout << "--------------end----------------" << std::endl;
@@ -208,19 +197,13 @@ void Chat::writeMessage()
 
     if (to == "all")
     {
-//        std::shared_ptr<Message> message (new Message(_curentUserName->getUserName(), "all", text));
-//        _messages.push_back(message);
-//         Message *message = new Message(_curentUserName->getUserName(), "all", text);
-//         _messages.push_back(message);
-        _messages.push_back(Message(_curentUserName->getUserName(), "all", text));
+        std::shared_ptr<Message> message (new Message(_curentUserName->getUserName(), "all", text));
+        _messages.push_back(message);
     }
     else if (getHavingName(to))
     {
-//        std::shared_ptr<Message> message (new Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text));
-//        _messages.push_back(message);
-        /*Message *message = new Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text);
-        _messages.push_back(message);*/
-        _messages.push_back(Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text));
+        std::shared_ptr<Message> message (new Message(_curentUserName->getUserName(), getHavingName(to)->getUserName(), text));
+        _messages.push_back(message);
     }
     else
     {
@@ -249,21 +232,23 @@ void Chat::userInfo()
 
 void Chat::showUserInfo(unsigned int choice)
 {
-    std::cout << "Info about user " << users().at(choice).getUserName() << std::endl;
-    std::cout << "User login: " << users().at(choice).getUserLogin() << std::endl;
-    std::cout << "User password: " << users().at(choice).getUserPassword() << std::endl;
-    std::cout << "User name: " << users().at(choice).getUserName() << std::endl;
+    std::cout << "Info about user " << users().at(choice)->getUserName() << std::endl;
+    std::cout << "User login: " << users().at(choice)->getUserLogin() << std::endl;
+    std::cout << "User password: " << users().at(choice)->getUserPassword() << std::endl;
+    std::cout << "User name: " << users().at(choice)->getUserName() << std::endl;
     int a{0}, b{0};
     for(auto mes : _messages) {
-        if (mes.getFrom() == users().at(choice).getUserName()) a++;
-        if (mes.getTo() == users().at(choice).getUserName()) b++;
+        if (mes->getFrom() == users().at(choice)->getUserName()) a++;
+        if (mes->getTo() == users().at(choice)->getUserName()) b++;
     }
     std::cout << "Number of outgoing messages: " << a << std::endl;
     std::cout << "Number of incoming messages: " << b << std::endl;
 }
 
 ChatError::ChatError(int num) : m_numError(num)
-{}
+{
+    SetColor(4,0);
+}
 
 const char* ChatError::what() const noexcept
 {
