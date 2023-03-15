@@ -41,7 +41,8 @@ void Chat::working()
             userInfo();
             break;
         default:
-            std::cout << "\x1b[31mRetry please...\x1b[0m" << std::endl;
+            SetColor(4, 0);
+            std::cout << "Retry please..." << std::endl;
             break;
         }
     }
@@ -63,11 +64,13 @@ void Chat::createUser()
 
     if (login == "all" || getHavingLogin(login))
     {
-        std::cout << "\x1b[31mError. This login already exists.\x1b[0m" << std::endl;
+        SetColor(4, 0);
+        std::cout << "Error. This login already exists." << std::endl;
     }
     else if (name == "all" || getHavingName(name))
     {
-        std::cout << "\x1b[31mError. This name already exists.\x1b[0m" << std::endl;
+        SetColor(4, 0);
+        std::cout << "Error. This name already exists." << std::endl;
     }
     else
     {
@@ -105,7 +108,8 @@ void Chat::chatEntry()
     if (_curentUserName == nullptr || (password != _curentUserName->getUserPassword()))
     {
         _curentUserName = nullptr;
-        std::cout << "\x1b[31mError.\x1b[0m" << std::endl;
+        SetColor(4, 0);
+        std::cout << "Error." << std::endl;
     }
     else
     {
@@ -137,7 +141,8 @@ void Chat::workingUser()
             writeMessage();
             break;
         default:
-            std::cout << "\x1b[31mRetry please...\x1b[0m" << std::endl;
+            SetColor(4, 0);
+            std::cout << "Retry please..." << std::endl;
             break;
         }
     }
@@ -219,7 +224,8 @@ void Chat::writeMessage()
     }
     else
     {
-        std::cout << "\x1b[31mError. No username.\x1b[0m" << std::endl;
+        SetColor(4, 0);
+        std::cout << "Error. No username." << std::endl;
     }
 }
 
@@ -263,4 +269,3 @@ const char* ChatError::what() const noexcept
 {
     return m_message[m_numError].c_str();
 }
-
