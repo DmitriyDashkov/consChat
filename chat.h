@@ -1,19 +1,21 @@
 #pragma once
 #include "user.h"
 #include "Message.h"
+#include "ChatError.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
 #include <exception>
-using namespace std;
+#include <limits>
+#include <windows.h>
 
 class Chat
 {
 private:
     std::string _name;                          //имя чата
-    std::vector<shared_ptr<User>> _users;       //пользователи чата
-    std::vector<shared_ptr<Message>> _messages; //все сообщения
+    std::vector<std::shared_ptr<User>> _users;       //пользователи чата
+    std::vector<std::shared_ptr<Message>> _messages; //все сообщения
     std::shared_ptr<User> _curentUserName = nullptr;
 
 public:
@@ -31,20 +33,5 @@ public:
     void writeMessage();                                    //написать сообщение
     void userInfo();
     void showUserInfo(unsigned int);
-    std::vector<shared_ptr<User>> users()   {return _users;}
-};
-
-class ChatError : public exception
-{
-private:
-    int m_numError;
-    const std::string m_message [1] {
-                                "Incorrect access by index"     //0
-                                };
-public:
-    ChatError() = default;
-    ChatError(int num);
-    int NumError() const                     {return m_numError;}
-    const std::string Message(int i) const   {return m_message[i];}
-    virtual const char* what() const noexcept override;
+    std::vector<std::shared_ptr<User>> users()   {return _users;}
 };
