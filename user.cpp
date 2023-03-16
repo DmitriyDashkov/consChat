@@ -2,7 +2,7 @@
 
 User::User() = default;
 User::User(const std::string & login, const std::string & password, const std::string & name) : _login(login), _password(password), _name(name) {}
-User::~User() {}
+User::~User() = default;
 
 std::string User::getUserLogin() const { return _login; }
 std::string User::getUserPassword() const { return _password; }

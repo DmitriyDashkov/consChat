@@ -10,10 +10,7 @@ void SetColor(int text, int bg){
 
 Chat::Chat(std::string n) : _name(n) {}
 
-Chat::~Chat()
-{
-
-}
+Chat::~Chat() = default;
 
 void Chat::working()
 {
@@ -159,9 +156,6 @@ std::shared_ptr<User> Chat::getHavingName(const std::string& name) const
 
 void Chat::readMessages()
 {
-    std::string from;
-    std::string to;
-
     SetColor(10, 0);    //общие
     std::cout << "\n********** Messages to all **********" << std::endl;
     for (auto& message : _messages)
@@ -222,7 +216,7 @@ void Chat::userInfo()
             cin.clear();
             fflush(stdin);
         }
-        if(choice < 0 || choice >= users().size()) throw ChatError(0);
+        if(choice >= users().size()) throw ChatError(0);
         else
             showUserInfo(choice);
     } catch (ChatError& ex) {
