@@ -1,6 +1,4 @@
 #include "chat.h"
-#include <limits>
-#include <windows.h>
 
 //установка цвета текста консоли
 void SetColor(int text, int bg){
@@ -211,21 +209,24 @@ void Chat::userInfo()
     try {
         std::cout << "Enter user index" << std::endl;
         unsigned int choice;
-        while (!(cin >> choice)) {
-            cout << "Input Error\n";
-            cin.clear();
+        while (!(std::cin >> choice)) {
+            std::cout << "Input Error\n";
+            std::cin.clear();
             fflush(stdin);
         }
         if(choice >= users().size()) throw ChatError(0);
         else
             showUserInfo(choice);
-    } catch (ChatError& ex) {
-        cout << ex.what() << endl;
+    } 
+    catch (ChatError& ex) {
+        SetColor(4, 0);
+        std::cout << ex.what() << std::endl;
     }
 }
 
 void Chat::showUserInfo(unsigned int choice)
 {
+    SetColor(7, 0);
     std::cout << "Info about user " << users().at(choice)->getUserName() << std::endl;
     std::cout << "User login: " << users().at(choice)->getUserLogin() << std::endl;
     std::cout << "User password: " << users().at(choice)->getUserPassword() << std::endl;
@@ -237,14 +238,4 @@ void Chat::showUserInfo(unsigned int choice)
     }
     std::cout << "Number of outgoing messages: " << a << std::endl;
     std::cout << "Number of incoming messages: " << b << std::endl;
-}
-
-ChatError::ChatError(int num) : m_numError(num)
-{
-    SetColor(4,0);
-}
-
-const char* ChatError::what() const noexcept
-{
-    return m_message[m_numError].c_str();
 }
